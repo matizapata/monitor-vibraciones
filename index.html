@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitor de Vibraciones IoT - TEI201</title>
+  <!-- Chart.js desde CDN (declarado en FUENTES.md) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --ok: #22c55e;
+      --alert: #ef4444;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    header { margin-bottom: 20px; }
+    h1 { font-size: 1.5rem; }
+    .subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+    .status-banner {
+      margin-top: 14px; padding: 12px 16px; border-radius: 10px;
+      font-weight: 600; display: flex; align-items: center; gap: 10px;
+    }
+    .status-ok    { background: rgba(34,197,94,0.15);  color: var(--ok);    border: 1px solid var(--ok); }
+    .status-alert { background: rgba(239,68,68,0.15);  color: var(--alert); border: 1px solid var(--alert); }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: currentColor; }
+    .pulse { animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin: 20px 0; }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px;
+    }
+    .card .label { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .card .value { font-size: 1.7rem; font-weight: 700; margin-top: 6px; }
+    .card .unit { font-size: 0.85rem; color: var(--muted); font-weight: 400; }
+
+    .chart-box {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px; margin-bottom: 18px;
+    }
+    .chart-box h2 { font-size: 1rem; margin-bottom: 12px; font-weight: 600; }
+    footer { color: var(--muted); font-size: 0.78rem; text-align: center; margin-top: 24px; }
+    .meta { color: var(--muted); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Monitor de Vibraciones IoT</h1>
+    <div class="subtitle">TEI201 - Avance #3 &middot; ESP32 + MPU6050 &rarr; PostgreSQL &middot; Datos en tiempo real</div>
+    <div id="statusBanner" class="status-banner status-ok">
+      <span class="dot pulse"></span>
+      <span id="statusText">Conectando...</span>
+    </div>
+  </header>
+
+  <section class="cards">
+    <div class="card">
+      <div class="label">Vibracion actual</div>
+      <div class="value"><span id="vibActual">--</span> <span class="unit">m/s&sup2;</span></div>
+    </div>
+    <div class="card">
+      <div class="label">Promedio (1h)</div>
+      <div class="value"><span id="vibProm">--</span> <span class="unit">m/s&sup2;</span></div>
+    </div>
+    <div class="card">
+      <div class="label">Maximo (1h)</div>
+      <div class="value"><span id="vibMax">--</span> <span class="unit">m/s&sup2;</span></div>
+    </div>
+    <div class="card">
+      <div class="label">Alertas (1h)</div>
+      <div class="value" id="alertCount">--</div>
+    </div>
+    <div class="card">
+      <div class="label">Umbral alerta</div>
+      <div class="value"><span id="umbral">--</span> <span class="unit">m/s&sup2;</span></div>
+    </div>
+    <div class="card">
+      <div class="label">Lecturas (1h)</div>
+      <div class="value" id="total">--</div>
+    </div>
+  </section>
+
+  <div class="chart-box">
+    <h2>Vibracion RMS en el tiempo</h2>
+    <canvas id="chartRms" height="110"></canvas>
+  </div>
+
+  <div class="chart-box">
+    <h2>Aceleracion por eje (X, Y, Z)</h2>
+    <canvas id="chartAxes" height="110"></canvas>
+  </div>
+
+  <footer>
+    <div class="meta">Actualizacion automatica cada 2 s &middot; Ultima lectura: <span id="lastSeen">--</span></div>
+    <div style="margin-top:6px;">Universidad Adolfo Ibanez &middot; Design Engineering Center</div>
+  </footer>
+
+  <script>
+    // ------------------------------------------------------------------
+    //  Configuracion del dashboard
+    // ------------------------------------------------------------------
+    const REFRESH_MS = 2000;   // cada cuanto se refrescan los datos
+    const MAX_POINTS = 60;     // cuantos puntos mostrar en los graficos
+
+    // ------------------------------------------------------------------
+    //  Grafico 1: vibracion RMS + linea de umbral
+    // ------------------------------------------------------------------
+    const ctxRms = document.getElementById('chartRms').getContext('2d');
+    const chartRms = new Chart(ctxRms, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Vibracion RMS (m/s2)',
+            data: [],
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56,189,248,0.15)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 0,
+          },
+          {
+            label: 'Umbral de alerta',
+            data: [],
+            borderColor: '#ef4444',
+            borderDash: [6, 6],
+            pointRadius: 0,
+            fill: false,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        scales: {
+          x: { ticks: { color: '#94a3b8', maxTicksLimit: 8 }, grid: { color: '#1e293b' } },
+          y: { beginAtZero: true, ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+        },
+        plugins: { legend: { labels: { color: '#e2e8f0' } } },
+      },
+    });
+
+    // ------------------------------------------------------------------
+    //  Grafico 2: aceleracion por eje
+    // ------------------------------------------------------------------
+    const ctxAxes = document.getElementById('chartAxes').getContext('2d');
+    const chartAxes = new Chart(ctxAxes, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          { label: 'X', data: [], borderColor: '#f87171', pointRadius: 0, tension: 0.3 },
+          { label: 'Y', data: [], borderColor: '#34d399', pointRadius: 0, tension: 0.3 },
+          { label: 'Z', data: [], borderColor: '#fbbf24', pointRadius: 0, tension: 0.3 },
+        ],
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        scales: {
+          x: { ticks: { color: '#94a3b8', maxTicksLimit: 8 }, grid: { color: '#1e293b' } },
+          y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+        },
+        plugins: { legend: { labels: { color: '#e2e8f0' } } },
+      },
+    });
+
+    // ------------------------------------------------------------------
+    //  Utilidades
+    // ------------------------------------------------------------------
+    function fmtTime(iso) {
+      const d = new Date(iso);
+      return d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+    function n(x, dec = 2) { return (x == null || isNaN(x)) ? '--' : Number(x).toFixed(dec); }
+
+    // ------------------------------------------------------------------
+    //  Carga de datos desde la API
+    // ------------------------------------------------------------------
+    async function refresh() {
+      try {
+        const [readingsRes, statsRes] = await Promise.all([
+          fetch('/api/readings?limit=' + MAX_POINTS),
+          fetch('/api/stats'),
+        ]);
+        const readings = await readingsRes.json();
+        const stats = await statsRes.json();
+
+        // --- Tarjetas ---
+        document.getElementById('vibActual').textContent = n(stats.vibracion_actual);
+        document.getElementById('vibProm').textContent   = n(stats.promedio);
+        document.getElementById('vibMax').textContent    = n(stats.maximo);
+        document.getElementById('alertCount').textContent= stats.alertas_ultima_hora ?? '--';
+        document.getElementById('umbral').textContent    = n(stats.umbral_alerta);
+        document.getElementById('total').textContent     = stats.total_ultima_hora ?? '--';
+        document.getElementById('lastSeen').textContent  = stats.ultima_lectura ? fmtTime(stats.ultima_lectura) : 'sin datos';
+
+        // --- Banner de estado ---
+        const banner = document.getElementById('statusBanner');
+        const text = document.getElementById('statusText');
+        if (stats.total_ultima_hora === 0 || !stats.ultima_lectura) {
+          banner.className = 'status-banner status-ok';
+          text.textContent = 'Esperando datos del dispositivo...';
+        } else if (stats.estado === 'ALERTA') {
+          banner.className = 'status-banner status-alert';
+          text.textContent = 'ALERTA: vibracion sobre el umbral (' + n(stats.vibracion_actual) + ' m/s2)';
+        } else {
+          banner.className = 'status-banner status-ok';
+          text.textContent = 'Sistema normal - vibracion dentro de rango';
+        }
+
+        // --- Graficos ---
+        const labels = readings.map(r => fmtTime(r.created_at));
+        const umbral = stats.umbral_alerta;
+
+        chartRms.data.labels = labels;
+        chartRms.data.datasets[0].data = readings.map(r => r.vibration_rms);
+        chartRms.data.datasets[1].data = readings.map(() => umbral);
+        chartRms.update();
+
+        chartAxes.data.labels = labels;
+        chartAxes.data.datasets[0].data = readings.map(r => r.accel_x);
+        chartAxes.data.datasets[1].data = readings.map(r => r.accel_y);
+        chartAxes.data.datasets[2].data = readings.map(r => r.accel_z);
+        chartAxes.update();
+      } catch (err) {
+        const text = document.getElementById('statusText');
+        document.getElementById('statusBanner').className = 'status-banner status-alert';
+        text.textContent = 'Error de conexion con el servidor';
+        console.error(err);
+      }
+    }
+
+    refresh();
+    setInterval(refresh, REFRESH_MS);
+  </script>
+</body>
+</html>

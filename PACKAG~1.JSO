@@ -1,0 +1,17 @@
+{
+  "name": "monitor-vibraciones",
+  "version": "1.0.0",
+  "description": "API + dashboard de monitoreo de vibraciones IoT (ESP32 + MPU6050). TEI201 - UAI.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.11.5"
+  },
+  "license": "MIT"
+}
