@@ -2,8 +2,7 @@
 
 Este archivo declara las librerías, el código externo y el uso de inteligencia artificial en el proyecto, según el código de honor UAI y los requisitos del Avance #3.
 
-> **Importante para el equipo:** revisen este archivo y ajústenlo a lo que realmente hicieron. El evaluador puede preguntar por cualquier función; todos deben poder explicar qué hace y por qué. Declarar el uso de IA **no exime** de entender el código.
-
+Integrantes: Matias Zapata, Diego Perez, Rafael Muñoz y Antonia Traslaviña
 ---
 
 ## Librerías utilizadas
