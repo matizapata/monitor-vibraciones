@@ -112,12 +112,12 @@
   </div>
 
   <footer>
-    <div class="meta">Actualizacion automatica cada 1 s &middot; Ultima lectura: <span id="lastSeen">--</span></div>
+    <div class="meta">Actualizacion automatica cada 5 s &middot; Ultima lectura: <span id="lastSeen">--</span></div>
     <div style="margin-top:6px;">Universidad Adolfo Ibanez &middot; Design Engineering Center</div>
   </footer>
 
   <script>
-    const REFRESH_MS = 1000;   // actualizacion mas fluida (cada 1 segundo)
+    const REFRESH_MS = 5000;   // recapitula cada 5 segundos (en linea con el envio del ESP32)
     const MAX_POINTS = 90;     // puntos visibles en los graficos en vivo
 
     const ctxRms = document.getElementById('chartRms').getContext('2d');
