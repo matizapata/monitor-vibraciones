@@ -14,8 +14,7 @@ Prototipo IoT que captura vibraciones con un sensor **MPU6050** conectado a un *
 
 ## Problema que resuelve
 
-> Completar con referencia al Avance 1. Ejemplo:
-> "Identificamos que los postes de luz rurales sufren fallas por vibración excesiva sin que nadie lo detecte a tiempo. Nuestro sistema mide la vibración de forma continua, la registra y alerta cuando supera un umbral seguro, permitiendo mantenimiento preventivo antes de que ocurra una falla."
+> En el Avance 1 identificamos que los postes de luz rurales sufren fallas estructurales por vibración excesiva (viento, paso de vehículos) sin que nadie lo detecte a tiempo. Nuestro sistema mide la vibración de forma continua, la registra y alerta cuando supera 0.70 m/s², permitiendo mantenimiento preventivo antes de una falla.
 
 ## Ciclo de datos (captura → información → decisión)
 
