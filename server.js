@@ -102,6 +102,25 @@ app.get('/api/readings', async (req, res) => {
   }
 });
 
+// --- GET: recapitulacion de la ultima hora (para la tabla) ---
+app.get('/api/history', async (req, res) => {
+  const minutes = Math.min(parseInt(req.query.minutes, 10) || 60, 1440);
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, device_id, vibration_rms, vibration_peak, alert, created_at
+         FROM readings
+        WHERE created_at > NOW() - make_interval(mins => $1::int)
+        ORDER BY created_at DESC
+        LIMIT 1000`,
+      [minutes]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('[API] Error en history:', err.message);
+    res.status(500).json({ error: 'Error al consultar el historico' });
+  }
+});
+
 // --- GET: estadisticas / informacion util ---
 app.get('/api/stats', async (req, res) => {
   try {
