@@ -51,7 +51,7 @@ Integrantes: Matias Zapata, Diego Perez, Rafael Muñoz y Antonia Traslaviña
 ### Estructura base del proyecto (firmware, backend, dashboard)
 - **Herramienta:** Claude (Anthropic), junio 2026.
 - **Uso:** generación de la estructura inicial del firmware, la API en Express, el esquema de PostgreSQL y el dashboard con Chart.js a partir de la especificación del equipo (sensor MPU6050, envío por HTTP POST, despliegue en Railway).
-- **Comprensión del equipo:** el sistema sigue el ciclo captura → procesamiento → almacenamiento → visualización. El firmware muestrea a 200 Hz y envía el RMS cada 1 s; el backend valida, calcula el estado de alerta y guarda en la tabla `readings`; el dashboard consulta `/api/readings` y `/api/stats` cada 2 s.
+- **Comprensión del equipo:** el sistema sigue el ciclo captura → procesamiento → almacenamiento → visualización. El firmware muestrea a 200 Hz y envía el RMS cada 1 s; el backend valida, calcula el estado de alerta y guarda en la tabla `readings`; el dashboard consulta `/api/readings` y `/api/stats` cada 5 s.
 
 ### Cálculo del índice de vibración RMS (main.ino)
 - **Herramienta:** Claude (Anthropic), junio 2026.
