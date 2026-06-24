@@ -9,12 +9,12 @@ Integrantes: Matias Zapata, Diego Perez, Rafael Muñoz y Antonia Traslaviña
 
 ### Firmware (ESP32 / Arduino)
 
-| Librería | Versión | Uso en el proyecto | Fuente |
-|---|---|---|---|
-| Adafruit MPU6050 | 2.2.x | Leer aceleración del sensor MPU6050 por I2C | https://github.com/adafruit/Adafruit_MPU6050 |
-| Adafruit Unified Sensor | 1.1.x | Capa base requerida por la librería del MPU6050 | https://github.com/adafruit/Adafruit_Sensor |
-| ArduinoJson | 6.21.x | Construir el JSON que se envía a la API | https://github.com/bblanchon/ArduinoJson |
-| WiFi.h / HTTPClient.h | core ESP32 | Conexión WiFi y envío HTTP POST | Incluidas en el core de ESP32 (Espressif) |
+| Librería | Uso en el proyecto | Fuente |
+|---|---|---|
+| Adafruit MPU6050 | Leer aceleración del sensor MPU6050 por I2C | https://github.com/adafruit/Adafruit_MPU6050 |
+| Adafruit Unified Sensor | Capa base requerida por la librería del MPU6050 | https://github.com/adafruit/Adafruit_Sensor |
+| ArduinoJson | Construir el JSON que se envía a la API | https://github.com/bblanchon/ArduinoJson |
+| WiFi.h / HTTPClient.h | Conexión WiFi y envío HTTP POST | Incluidas en el core de ESP32 (Espressif) |
 
 ### Backend (Node.js)
 
