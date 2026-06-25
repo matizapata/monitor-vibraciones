@@ -68,5 +68,3 @@ Este archivo declara las librerías, el código externo y el uso de inteligencia
 - **Herramienta:** Vizcom (herramienta de IA para renderizado/diseño industrial), junio 2026.
 - **Uso:** se generó el renderizado 3D del encapsulado a partir del diseño realizado por el equipo.
 - **Comprensión / adaptación:** el equipo definió la forma, las dimensiones y la disposición de los componentes; Vizcom se usó para producir la visualización/render del modelo. Los planos y el modelado se trabajaron en Fusion 360.
-
-> **Pendiente del equipo:** si modifican prompts, parámetros (umbral, frecuencia) o agregan funciones, agréguenlo aquí con la misma estructura: herramienta, qué hace, adaptación y comprensión.
