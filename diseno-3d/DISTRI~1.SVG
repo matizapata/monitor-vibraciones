@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 720" font-family="Arial, sans-serif">
+  <rect x="0" y="0" width="980" height="720" fill="#ffffff"/>
+  <text x="490" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#1F3864">Distribución del Encapsulado — Monitor de Vibraciones</text>
+  <text x="490" y="56" text-anchor="middle" font-size="13" fill="#555">Referencia para el modelado en Fusion 360 · Medidas en mm</text>
+
+  <!-- ===================== VISTA SUPERIOR ===================== -->
+  <text x="60" y="98" font-size="16" font-weight="bold" fill="#145a32">Vista superior (interior)</text>
+
+  <!-- Caja interna 120 x 80 -> escala 3 px/mm => 360 x 240 -->
+  <rect x="80" y="120" width="360" height="240" fill="#F7F9FC" stroke="#333" stroke-width="2.5"/>
+  <!-- cota ancho 120 -->
+  <line x1="80" y1="108" x2="440" y2="108" stroke="#888" stroke-width="1"/>
+  <line x1="80" y1="103" x2="80" y2="113" stroke="#888"/><line x1="440" y1="103" x2="440" y2="113" stroke="#888"/>
+  <text x="260" y="103" text-anchor="middle" font-size="12" fill="#555">120 mm</text>
+  <!-- cota alto 80 -->
+  <line x1="455" y1="120" x2="455" y2="360" stroke="#888" stroke-width="1"/>
+  <line x1="450" y1="120" x2="460" y2="120" stroke="#888"/><line x1="450" y1="360" x2="460" y2="360" stroke="#888"/>
+  <text x="470" y="245" font-size="12" fill="#555" transform="rotate(90 470 245)">80 mm</text>
+
+  <!-- ESP32 55x28 -> 165x84 -->
+  <rect x="95" y="250" width="165" height="84" fill="#E9F7EF" stroke="#1e8449" stroke-width="2"/>
+  <text x="177" y="288" text-anchor="middle" font-size="12" font-weight="bold" fill="#145a32">ESP32</text>
+  <text x="177" y="304" text-anchor="middle" font-size="10" fill="#145a32">55 × 28</text>
+  <!-- USB hacia abajo (ranura) -->
+  <rect x="160" y="334" width="34" height="10" fill="#1e8449"/>
+  <text x="205" y="352" font-size="9" fill="#1e8449">USB→ranura</text>
+
+  <!-- Portabaterías 18650 75x20 -> 225x60 -->
+  <rect x="120" y="135" width="225" height="60" fill="#EFEFEF" stroke="#666" stroke-width="2"/>
+  <text x="232" y="162" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">Portabaterías 18650</text>
+  <text x="232" y="178" text-anchor="middle" font-size="10" fill="#333">75 × 20  (batería ⌀18.5)</text>
+
+  <!-- TP4056 26x17 -> 78x51 -->
+  <rect x="350" y="250" width="78" height="51" fill="#EAF2FB" stroke="#2E5496" stroke-width="2"/>
+  <text x="389" y="272" text-anchor="middle" font-size="11" font-weight="bold" fill="#1F3864">TP4056</text>
+  <text x="389" y="288" text-anchor="middle" font-size="9" fill="#1F3864">26 × 17</text>
+
+  <!-- MPU6050 21x16 -> 63x48 -->
+  <rect x="365" y="312" width="63" height="40" fill="#FDEDEC" stroke="#c0392b" stroke-width="2"/>
+  <text x="396" y="330" text-anchor="middle" font-size="10" font-weight="bold" fill="#922b21">MPU6050</text>
+  <text x="396" y="344" text-anchor="middle" font-size="9" fill="#922b21">21 × 16</text>
+
+  <!-- Postes M3 en esquinas -->
+  <circle cx="92" cy="132" r="6" fill="none" stroke="#888" stroke-width="2"/>
+  <circle cx="428" cy="132" r="6" fill="none" stroke="#888" stroke-width="2"/>
+  <circle cx="92" cy="348" r="6" fill="none" stroke="#888" stroke-width="2"/>
+  <circle cx="428" cy="348" r="6" fill="none" stroke="#888" stroke-width="2"/>
+  <text x="60" y="384" font-size="10" fill="#888">○ = postes para tornillo M3 (tapa atornillada)</text>
+
+  <!-- ===================== VISTA LATERAL ===================== -->
+  <text x="600" y="98" font-size="16" font-weight="bold" fill="#145a32">Vista lateral (corte)</text>
+
+  <!-- Caja lateral 125 x 55 -> 3px/mm => 375 x 165, pero usamos escala menor: 2.4 -->
+  <!-- base externa 125 ancho x 55 alto -> 312 x 137 -->
+  <rect x="560" y="200" width="312" height="137" fill="#F7F9FC" stroke="#333" stroke-width="2.5"/>
+  <!-- pared interior (shell 2.5mm) indicada -->
+  <rect x="566" y="206" width="300" height="120" fill="none" stroke="#bbb" stroke-width="1" stroke-dasharray="4 3"/>
+  <!-- tapa -->
+  <rect x="556" y="184" width="320" height="16" fill="#DDE6F2" stroke="#2E5496" stroke-width="2"/>
+  <text x="716" y="196" text-anchor="middle" font-size="11" fill="#1F3864">Tapa atornillada</text>
+
+  <!-- panel solar inclinado sobre la tapa -->
+  <polygon points="585,184 800,140 808,150 593,194" fill="#FFF7E0" stroke="#E0A800" stroke-width="2"/>
+  <text x="690" y="158" text-anchor="middle" font-size="11" font-weight="bold" fill="#9a6b00" transform="rotate(-11 690 158)">Panel solar 165 × 65</text>
+
+  <!-- componentes dentro (lateral) -->
+  <rect x="580" y="300" width="90" height="26" fill="#E9F7EF" stroke="#1e8449" stroke-width="1.5"/>
+  <text x="625" y="317" text-anchor="middle" font-size="9" fill="#145a32">ESP32</text>
+  <rect x="690" y="296" width="60" height="30" fill="#EFEFEF" stroke="#666" stroke-width="1.5"/>
+  <text x="720" y="315" text-anchor="middle" font-size="9" fill="#333">18650</text>
+  <rect x="775" y="306" width="50" height="20" fill="#EAF2FB" stroke="#2E5496" stroke-width="1.5"/>
+  <text x="800" y="320" text-anchor="middle" font-size="8" fill="#1F3864">TP4056</text>
+
+  <!-- ranura USB -->
+  <rect x="556" y="305" width="6" height="12" fill="#1e8449"/>
+  <text x="520" y="315" font-size="9" fill="#1e8449">USB</text>
+
+  <!-- cota alto 55 -->
+  <line x1="888" y1="200" x2="888" y2="337" stroke="#888"/>
+  <line x1="883" y1="200" x2="893" y2="200" stroke="#888"/><line x1="883" y1="337" x2="893" y2="337" stroke="#888"/>
+  <text x="903" y="272" font-size="12" fill="#555" transform="rotate(90 903 272)">55 mm</text>
+  <!-- cota ancho 125 -->
+  <line x1="560" y1="352" x2="872" y2="352" stroke="#888"/>
+  <line x1="560" y1="347" x2="560" y2="357" stroke="#888"/><line x1="872" y1="347" x2="872" y2="357" stroke="#888"/>
+  <text x="716" y="368" text-anchor="middle" font-size="12" fill="#555">125 mm</text>
+
+  <!-- ===================== NOTAS ===================== -->
+  <rect x="60" y="430" width="860" height="250" rx="8" fill="#FAFAFA" stroke="#ccc"/>
+  <text x="80" y="458" font-size="14" font-weight="bold" fill="#1F3864">Notas de diseño</text>
+
+  <text x="80" y="486" font-size="12.5" fill="#333">• <tspan font-weight="bold">Encapsulado:</tspan> interno 120 × 80 × 50 mm · pared 2.5 mm · externo ~125 × 85 × 55 mm.</text>
+  <text x="80" y="510" font-size="12.5" fill="#333">• <tspan font-weight="bold">Tapa atornillada</tspan> con 4 tornillos M3 (no pegada) → diseño para reparación.</text>
+  <text x="80" y="534" font-size="12.5" fill="#333">• <tspan font-weight="bold">Holgura tapa/base:</tspan> 0.3–0.4 mm. Postes ⌀6 mm con agujero ⌀2.8 mm para M3.</text>
+  <text x="80" y="558" font-size="12.5" fill="#333">• <tspan font-weight="bold">MPU6050</tspan> fijado rígido al chasis: debe transmitir la vibración real de la estructura (poste).</text>
+  <text x="80" y="582" font-size="12.5" fill="#333">• <tspan font-weight="bold">Batería 18650</tspan> en portabaterías → recambio sin soldar.</text>
+  <text x="80" y="606" font-size="12.5" fill="#333">• <tspan font-weight="bold">Aberturas:</tspan> ranura USB (12 × 6 mm) para cargar firmware · paso de cable del panel solar (⌀5 mm).</text>
+  <text x="80" y="630" font-size="12.5" fill="#333">• <tspan font-weight="bold">Panel solar</tspan> (165 × 65) montado en bracket inclinado (~30°) sobre la tapa.</text>
+  <text x="80" y="660" font-size="11" fill="#777">Medidas típicas de catálogo: verificar con pie de metro antes de imprimir. Este diagrama es referencia; los planos técnicos finales se generan en Fusion 360.</text>
+</svg>
